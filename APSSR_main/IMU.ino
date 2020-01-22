@@ -8,6 +8,9 @@
 #include <Adafruit_L3GD20_U.h>
 #include <Adafruit_9DOF.h>
 
+// todo: return quaternions?! 
+//imu::Quaternion quat = bno.getQuat();
+
 /* Assign a unique ID to the sensors */
 Adafruit_LSM303_Accel_Unified accel = Adafruit_LSM303_Accel_Unified(30301);
 Adafruit_LSM303_Mag_Unified   mag   = Adafruit_LSM303_Mag_Unified(30302);
@@ -36,13 +39,11 @@ void IMU_setup(){
     while(1);
   }
   
-  /* Display some basic information on this sensor */
-  displaySensorDetails();
 
  
 }
 
-void IMU__read(){
+void IMU_read(){
 // Reads from the IMU
 // Returns info
 

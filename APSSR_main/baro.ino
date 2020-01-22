@@ -37,7 +37,7 @@ void baro_setup() {
 
 
 
-void loop() {
+void baro_read() {
     Serial.print(F("Temperature = "));
     Serial.print(bmp.readTemperature());
     Serial.println(" *C");

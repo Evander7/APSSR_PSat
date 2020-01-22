@@ -12,16 +12,16 @@
 // - RTC/SD Card
 // - A U D I O
 
-#define CAMDEF
+//#define CAMDEF
 
 /*Comment/Uncomment to turn modules on/off*/
-#define BARO_ON
-#define IMU_ON
-#define GPS_ON
+//#define BARO_ON
+//#define IMU_ON
+//#define GPS_ON
 //#define WiFi_ON
-#define CAM_ON
-#define SD_ON
-#define RTC_ON
+//#define CAM_ON
+//#define SD_ON
+//#define RTC_ON
 
 
 
@@ -30,7 +30,7 @@ void setup() {
 
   //Starts serial communication
   Serial.begin(115200);
-  Serial.print("PSat starting up");
+  Serial.println("PSat starting up");
 
   // Setup of individual modules
   #ifdef BARO_ON
@@ -54,7 +54,7 @@ void setup() {
 
   #ifdef CAM_ON
   // Camera
-  camera_setup()
+  camera_setup();
   #endif
 
   #ifdef SD_ON
@@ -67,12 +67,16 @@ void setup() {
   #endif
 
   
+
+  
 // PLAY AUDIO
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+//  Serial.println("PSat loopin'");
+  delay(1000);
 
 //  Log telemetry
 //  baro_read()
@@ -83,17 +87,17 @@ void loop() {
 
   #ifdef BARO_ON
   // Temp/Pressure/Alt
-  baro_read()
+  baro_read();
   #endif
 
   #ifdef IMU_ON
   // IMU
-   IMU_read()
+   IMU_read();
    #endif
 
    #ifdef GPS_ON
   // GPS
-  GPS_read() //[+ status?]
+  Serial.println(GPS_read()); //[+ status?]
   #endif
   
   #ifdef WiFi_ON
@@ -103,12 +107,12 @@ void loop() {
 
   #ifdef CAM_ON
   // Camera
-  camera_setup()
+  camera_setup();
   #endif
 
   #ifdef RTC_ON
   //RTC
-  RTC_read()
+//  RTC_read();
   #endif
 
 

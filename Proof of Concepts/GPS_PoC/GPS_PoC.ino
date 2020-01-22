@@ -36,12 +36,54 @@ void setup() {
 
 
 void loop() {
-  if (Serial.available()) {
-    char c = Serial.read();
-    GPSSerial.write(c);
-  }
-  if (GPSSerial.available()) {
-    char c = GPSSerial.read();
-    Serial.write(c);
-  }
+  String gps_string = "";
+       // Get char
+     // if (char == '$') then start reading 
+    // read char again, store to string
+    // (if char == '\n') then set string to "", return string
+    // else not nl -> keep reading
+
+    if (GPSSerial.available()) {
+      char c = GPSSerial.read();
+      Serial.println(c);
+      if (strcmp(c,"$")==0){
+        gps_string += c;
+        c = GPSSerial.read();
+        Serial.println(c);        
+      }
+
+
+      
+//      Serial.write(c);
+    }
+
+
+
+
+
+  
+//  Serial.println("testing");
+
+//for (int i=0; i<15; i++){
+//  gps_string+= i;
+//  Serial.println(gps_string);
+//  
+//}
+
+
+//    if (GPSSerial.available()) {
+//      char c = GPSSerial.read();
+//      Serial.write(c);
+//    }
+
+
+  
+//  if (Serial.available()) {
+//    char c = Serial.read();
+//    GPSSerial.write(c);
+//  }
+//  if (GPSSerial.available()) {
+//    char c = GPSSerial.read();
+//    Serial.write(c);
+//  }
 }

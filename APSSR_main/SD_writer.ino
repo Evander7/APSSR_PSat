@@ -33,7 +33,7 @@ void SD_setup() {
   // connect at 115200 so we can read the GPS fast enough and echo without dropping chars
   // also spit it out
   Serial.println("\r\nSD Card started");
-  pinMode(SDPin1, OUTPUT);
+  pinMode(SDPin, OUTPUT);
 
 
   // see if the card is present and can be initialized:

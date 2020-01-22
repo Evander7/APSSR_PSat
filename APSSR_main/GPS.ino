@@ -14,14 +14,28 @@ void GPS_setup() {
 // Maybe it's worth parsing the data and extracting useful info in here?
 // YO maybe this just reads character by characters... Might have to read a certain amount of characters into a string then return that
 // I wonder 
-String read_GPS(){
-  if (Serial.available()) {
-    char c = Serial.read();
-    GPSSerial.write(c);
-  }
-  if (GPSSerial.available()) {
-    char c = GPSSerial.read();
-//    Serial.write(c);
-  }
-  return c
-}
+void GPS_read(){}
+//String GPS_read(){
+//  char c;
+//  bool sentence_end = false;
+//  for (int i=0; i<15; i++){
+//    if (GPSSerial.available()) {
+//      char c = GPSSerial.read();     
+//      if (String(c) == "$"){
+//        //Start reading
+//        Serial.println("dollas");
+//        while(!sentence_end){
+//          if (GPSSerial.available()){
+//            char c = GPSSerial.read();
+//            if (String(c) =="$"){
+//              // if the GPS string ends
+//              sentence_end = true;
+//            }
+//            Serial.print(c);
+//          }
+//        }
+//        }
+//      Serial.print(c);
+//    }
+//  }
+//}
