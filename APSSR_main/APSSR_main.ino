@@ -15,9 +15,9 @@
 //#define CAMDEF
 
 /*Comment/Uncomment to turn modules on/off*/
-//#define BARO_ON
+#define BARO_ON
 //#define IMU_ON
-//#define GPS_ON
+//#define GPS_ON // DEMON CODE NEVER RUN THIS
 //#define WiFi_ON
 //#define CAM_ON
 //#define SD_ON
@@ -29,7 +29,7 @@ void setup() {
   // put your setup code here, to run once:
 
   //Starts serial communication
-  Serial.begin(115200);
+  Serial.begin(9600);
   Serial.println("PSat starting up");
 
   // Setup of individual modules
@@ -43,10 +43,11 @@ void setup() {
    IMU_setup();
    #endif
 
-   #ifdef GPS_ON
-  // GPS
-  GPS_setup();
-  #endif
+// GPS IS DEMON CODE DO NOT RUN
+//   #ifdef GPS_ON
+//  // GPS
+//  GPS_setup();
+//  #endif
   
   #ifdef WiFi_ON
   // WiFi
