@@ -53,7 +53,7 @@ float baro_read(datapoint * dp) {
 //    Serial.print(altitude); /* Adjusted to local forecast! */
 //    Serial.println(" m");
 
-    Serial.println();
+// Saves data to dp structure
     dp->temp = temp;
     dp->pressure = pressure;
     dp->alt = altitude;

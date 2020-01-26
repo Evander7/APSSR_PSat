@@ -16,17 +16,17 @@
 
 /*Comment/Uncomment to turn modules on/off*/
 #define BARO_ON
-//#define IMU_ON //todo: gotta calibrate this shite lol
+//#define IMU_ON
 //#define GPS_ON // DEMON CODE NEVER RUN THIS
 //#define WiFi_ON
 //#define CAM_ON
 #define SD_ON
 //#define RTC_ON
 
-// Sets up the output filename to save data to. the '00' will be changed each time to be sequential.
-String output_filename = "APSSR00.csv";
-
-
+// Sets out a "datapoint" structure
+// Every loop, each sensor will read its specific values, and put them into a loop-specific dp object
+// This then gets concatenated together and saved as a .csv file!
+// If changing the datapoint struct, you need to change the way it's concatenated down below, and change the csv headers.
 struct datapoint {
   String time_point;
   float alt;
@@ -45,15 +45,11 @@ struct datapoint {
   int WiFi_status;
   int camera_status;
 };
-char filename[10];
-//typedef struct datapoint Datapoint;
 
 void setup() {
-  // put your setup code here, to run once:
-
   //Starts serial communication
   Serial.begin(9600);
-  Serial.println("PSat starting up");
+  Serial.println("APSSR PSat starting up");
 
   // Setup of individual modules
   #ifdef BARO_ON
@@ -84,49 +80,40 @@ void setup() {
   #ifdef SD_ON
   //SD Card
   SD_setup(&output_filename);
+  // Writes initial .csv headers
+  SD_write("Time stamp,Altitude [m],Temperature [*C],Pressure [pa],Acceleration_x [m/s^2],Acceleration_y [m/s^2 ],Acceleration_z [m/s^2],Magnetometer_x [uT],Magnetometer_y [uT],Magnetometer_z [uT],Gyroscope_x [rad/s],Gyroscope_y [rad/s],Gyroscope_z [rad/s],GPS,WiFi Status,Camera Status");
   #endif
 
   #ifdef RTC_ON
   //RTC
   #endif
-
-  
-
   
 // PLAY AUDIO
 
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-//  Serial.println("PSat loopin'");
-  delay(1000);
   // Creates #fresh datapoint object, so we can log stuff to it
   datapoint dp = {"placeholder"};
 
-//  Log telemetry
-//  baro_read()
-//  IMU_read()
-//  GPS_read() [+ status?]
-//  WiFi status read [?]
-//  RTC_read()
+//  Logs telemetry
+// barometer, IMU, GPS[?]. Checks status of other things too
 
+// Barometer
   #ifdef BARO_ON
   // Temp/Pressure/Alt
   baro_read(&dp);
-//  Serial.println(dp.temp);
-//  Serial.println(dp.pressure);
-//  Serial.println(dp.alt);
   #endif
 
+// IMU
   #ifdef IMU_ON
-  // IMU
-   IMU_read();
+  // Accel/Mag/Gyro
+   IMU_read(&dp);
    #endif
 
    #ifdef GPS_ON
   // GPS
-  Serial.println(GPS_read()); //[+ status?]
+//  Serial.println(GPS_read()); //[+ status?]
   #endif
   
   #ifdef WiFi_ON
@@ -153,11 +140,12 @@ void loop() {
 // turn camera off?
 // AUDIO: do we need to turn it on? off?
 
-//Save telemetry to SD card
-//SD_write(data_string)
+// Save telemetry to SD card
   #ifdef SD_ON
-  //SD Card
+  // SD Card
   // Turns the datapoint struct into a csv string
+  // I'm sure there's a better way to do this, I'm sorry
+  // Where's Python's ",".join(list) when ya need it eh
   String data_string;
   data_string = dp.time_point + "," + String(dp.alt) + "," + String(dp.temp) + "," + String(dp.pressure) + "," 
   + String(dp.accel_x) + "," + String(dp.accel_y) + "," + String(dp.accel_z) + "," 
@@ -165,7 +153,7 @@ void loop() {
   + String(dp.gyro_x) + "," + String(dp.gyro_y) + "," + String(dp.gyro_z) + "," 
   + String(dp.GPS) + "," + String(dp.WiFi_status) + "," + String(dp.camera_status);
   Serial.println(data_string);
-  SD_write(data_string, output_filename);
+  SD_write(data_string, filename);
   #endif
 
 //Send telemetry via wifi

@@ -43,36 +43,53 @@ void IMU_setup(){
  
 }
 
-void IMU_read(){
+void IMU_read(datapoint * dp){
 // Reads from the IMU
-// Returns info
+// Saves it to the datapoint object
 
   /* Get a new sensor event */
   sensors_event_t event;
 
 //  Gets acceleration (measured in m/s^2)
   accel.getEvent(&event);
-  Serial.print(F("ACCEL "));
-  Serial.print("X: "); Serial.print(event.acceleration.x); Serial.print("  ");
-  Serial.print("Y: "); Serial.print(event.acceleration.y); Serial.print("  ");
-  Serial.print("Z: "); Serial.print(event.acceleration.z); Serial.print("  ");Serial.println("m/s^2 ");
+
+  //Reads, saves data
+  //Accelerometer
+  dp->accel_x = event.acceleration.x;
+  dp->accel_y = event.acceleration.y;
+  dp->accel_z = event.acceleration.z;
+
+  //Magnetometer
+  dp->mag_x = event.magnetic.x;
+  dp->mag_y = event.magnetic.y;
+  dp->mag_z = event.magnetic.z;
+
+  // Gyroscope
+  dp->gyro_x = event.gyro.x;
+  dp->gyro_y = event.gyro.y;
+  dp->gyro_z = event.gyro.z;
+
+//  Serial.print(F("ACCEL "));
+//  Serial.print("X: "); Serial.print(event.acceleration.x); Serial.print("  ");
+//  Serial.print("Y: "); Serial.print(event.acceleration.y); Serial.print("  ");
+//  Serial.print("Z: "); Serial.print(event.acceleration.z); Serial.print("  ");Serial.println("m/s^2 ");
 
   /* Display the results (magnetic vector values are in micro-Tesla (uT)) */
-  mag.getEvent(&event);
-  Serial.print(F("MAG   "));
-  Serial.print("X: "); Serial.print(event.magnetic.x); Serial.print("  ");
-  Serial.print("Y: "); Serial.print(event.magnetic.y); Serial.print("  ");
-  Serial.print("Z: "); Serial.print(event.magnetic.z); Serial.print("  ");Serial.println("uT");
+//  mag.getEvent(&event);
+//  Serial.print(F("MAG   "));
+//  Serial.print("X: "); Serial.print(event.magnetic.x); Serial.print("  ");
+//  Serial.print("Y: "); Serial.print(event.magnetic.y); Serial.print("  ");
+//  Serial.print("Z: "); Serial.print(event.magnetic.z); Serial.print("  ");Serial.println("uT");
+//
+//  /* Display the results (gyrocope values in rad/s) */
+//  gyro.getEvent(&event);
+//  Serial.print(F("GYRO  "));
+//  Serial.print("X: "); Serial.print(event.gyro.x); Serial.print("  ");
+//  Serial.print("Y: "); Serial.print(event.gyro.y); Serial.print("  ");
+//  Serial.print("Z: "); Serial.print(event.gyro.z); Serial.print("  ");Serial.println("rad/s ");  
 
-  /* Display the results (gyrocope values in rad/s) */
-  gyro.getEvent(&event);
-  Serial.print(F("GYRO  "));
-  Serial.print("X: "); Serial.print(event.gyro.x); Serial.print("  ");
-  Serial.print("Y: "); Serial.print(event.gyro.y); Serial.print("  ");
-  Serial.print("Z: "); Serial.print(event.gyro.z); Serial.print("  ");Serial.println("rad/s ");  
-
-  Serial.println(F(""));
-  delay(1000);
+//  Serial.println(F(""));
+//  delay(1000);
 
 
 

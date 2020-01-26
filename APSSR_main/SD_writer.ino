@@ -7,7 +7,7 @@
 #define chipSelect 10
 
 File data_file;
-//char filename[10];
+char filename[10];
 
 // blink out an error code
 void error(uint8_t errno) {
@@ -28,7 +28,7 @@ void error(uint8_t errno) {
 // This line is not needed if you have Adafruit SAMD board package 1.6.2+
 //   #define Serial SerialUSB
 
-void SD_setup(String *new_file) {
+void SD_setup() {
   // see if the card is present and can be initialized:
   if (!SD.begin(chipSelect)) {
     Serial.println("Card init. failed!");
@@ -48,22 +48,10 @@ void SD_setup(String *new_file) {
       Serial.println(filename);
       File data_file = SD.open(filename, FILE_WRITE);
       data_file.close();
+      return filename;
       break;
     }
   }
-//
-//  logfile = SD.open(filename, FILE_WRITE);
-//  if( ! logfile ) {
-//    Serial.print("Couldnt create "); 
-//    Serial.println(filename);
-//    error(3);
-//  }
-//  Serial.print("Writing to "); 
-//  Serial.println(filename);
-//
-//  pinMode(13, OUTPUT);
-//  pinMode(8, OUTPUT);
-//  Serial.println("Ready!");
 }
 
 void SD_write(String to_write, String filename){
