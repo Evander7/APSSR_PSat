@@ -16,7 +16,7 @@
 
 /*Comment/Uncomment to turn modules on/off*/
 #define BARO_ON
-//#define IMU_ON
+#define IMU_ON
 //#define GPS_ON // DEMON CODE NEVER RUN THIS
 //#define WiFi_ON
 //#define CAM_ON
