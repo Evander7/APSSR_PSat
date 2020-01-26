@@ -16,14 +16,37 @@
 
 /*Comment/Uncomment to turn modules on/off*/
 #define BARO_ON
-//#define IMU_ON
+//#define IMU_ON //todo: gotta calibrate this shite lol
 //#define GPS_ON // DEMON CODE NEVER RUN THIS
 //#define WiFi_ON
 //#define CAM_ON
-//#define SD_ON
+#define SD_ON
 //#define RTC_ON
 
+// Sets up the output filename to save data to. the '00' will be changed each time to be sequential.
+String output_filename = "APSSR00.csv";
 
+
+struct datapoint {
+  String time_point;
+  float alt;
+  float temp;
+  float pressure;
+  int accel_x;
+  int accel_y;
+  int accel_z;
+  int mag_x;
+  int mag_y;
+  int mag_z;
+  int gyro_x;
+  int gyro_y;
+  int gyro_z;
+  int GPS;
+  int WiFi_status;
+  int camera_status;
+};
+char filename[10];
+//typedef struct datapoint Datapoint;
 
 void setup() {
   // put your setup code here, to run once:
@@ -60,7 +83,7 @@ void setup() {
 
   #ifdef SD_ON
   //SD Card
-  SD_setup();
+  SD_setup(&output_filename);
   #endif
 
   #ifdef RTC_ON
@@ -78,17 +101,22 @@ void loop() {
   // put your main code here, to run repeatedly:
 //  Serial.println("PSat loopin'");
   delay(1000);
+  // Creates #fresh datapoint object, so we can log stuff to it
+  datapoint dp = {"placeholder"};
 
 //  Log telemetry
 //  baro_read()
 //  IMU_read()
 //  GPS_read() [+ status?]
-//  WiFi status read [?}
+//  WiFi status read [?]
 //  RTC_read()
 
   #ifdef BARO_ON
   // Temp/Pressure/Alt
-  baro_read();
+  baro_read(&dp);
+//  Serial.println(dp.temp);
+//  Serial.println(dp.pressure);
+//  Serial.println(dp.alt);
   #endif
 
   #ifdef IMU_ON
@@ -129,7 +157,15 @@ void loop() {
 //SD_write(data_string)
   #ifdef SD_ON
   //SD Card
-  SD_write("Test data");
+  // Turns the datapoint struct into a csv string
+  String data_string;
+  data_string = dp.time_point + "," + String(dp.alt) + "," + String(dp.temp) + "," + String(dp.pressure) + "," 
+  + String(dp.accel_x) + "," + String(dp.accel_y) + "," + String(dp.accel_z) + "," 
+  + String(dp.mag_x) + "," + String(dp.mag_y) + "," + String(dp.mag_z) + "," 
+  + String(dp.gyro_x) + "," + String(dp.gyro_y) + "," + String(dp.gyro_z) + "," 
+  + String(dp.GPS) + "," + String(dp.WiFi_status) + "," + String(dp.camera_status);
+  Serial.println(data_string);
+  SD_write(data_string, output_filename);
   #endif
 
 //Send telemetry via wifi
@@ -160,6 +196,8 @@ void loop() {
   * Do we want more GPS data/refined GPS data?
   * 
   */
+
+
 
 
 

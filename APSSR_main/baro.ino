@@ -34,22 +34,27 @@ void baro_setup() {
 
 }
 
+float baro_read(datapoint * dp) {
+  float temp;
+  float pressure;
+  float altitude;
+//    Serial.print(F("Temperature = "));
+    temp = bmp.readTemperature();
+//    Serial.print(temp);
+//    Serial.println(" *C");
 
+//    Serial.print(F("Pressure = "));
+    pressure = bmp.readPressure();
+//    Serial.print(pressure);
+//    Serial.println(" Pa");
 
-
-void baro_read() {
-    Serial.print(F("Temperature = "));
-    Serial.print(bmp.readTemperature());
-    Serial.println(" *C");
-
-    Serial.print(F("Pressure = "));
-    Serial.print(bmp.readPressure());
-    Serial.println(" Pa");
-
-    Serial.print(F("Approx altitude = "));
-    Serial.print(bmp.readAltitude(1013.25)); /* Adjusted to local forecast! */
-    Serial.println(" m");
+//    Serial.print(F("Approx altitude = "));
+    altitude = bmp.readAltitude(1013.25);
+//    Serial.print(altitude); /* Adjusted to local forecast! */
+//    Serial.println(" m");
 
     Serial.println();
-    delay(100);
+    dp->temp = temp;
+    dp->pressure = pressure;
+    dp->alt = altitude;
 }

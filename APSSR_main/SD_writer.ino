@@ -1,24 +1,22 @@
 // APSSR PSat code 2020
 // Header file for the SD card
-
-// Includes
 #include <SPI.h>
 #include <SD.h>
 
 // Set the pins used
-#define cardSelect 4
-#define SDPin 13
+#define chipSelect 10
 
-File logfile;
+File data_file;
+//char filename[10];
 
 // blink out an error code
 void error(uint8_t errno) {
   while(1) {
     uint8_t i;
     for (i=0; i<errno; i++) {
-      digitalWrite(SDPin, HIGH);
+      digitalWrite(13, HIGH);
       delay(100);
-      digitalWrite(SDPin, LOW);
+      digitalWrite(13, LOW);
       delay(100);
     }
     for (i=errno; i<10; i++) {
@@ -27,53 +25,57 @@ void error(uint8_t errno) {
   }
 }
 
+// This line is not needed if you have Adafruit SAMD board package 1.6.2+
+//   #define Serial SerialUSB
 
-
-void SD_setup() {
-  // connect at 115200 so we can read the GPS fast enough and echo without dropping chars
-  // also spit it out
-  Serial.println("\r\nSD Card started");
-  pinMode(SDPin, OUTPUT);
-
-
+void SD_setup(String *new_file) {
   // see if the card is present and can be initialized:
-  if (!SD.begin(cardSelect)) {
+  if (!SD.begin(chipSelect)) {
     Serial.println("Card init. failed!");
     error(2);
   }
-  char filename[15];
-  strcpy(filename, "/ANALOG00.TXT");
+  Serial.println("SD Card Initialised");
+  
+
+  strcpy(filename, "APSSR00.csv");
+  // Renames filename to have sequential numbering
   for (uint8_t i = 0; i < 100; i++) {
-    filename[7] = '0' + i/10;
-    filename[8] = '0' + i%10;
+    filename[5] = '0' + i/10;
+    filename[6] = '0' + i%10;
     // create if does not exist, do not open existing, write, sync after write
     if (! SD.exists(filename)) {
+      Serial.println("Making file: ");
+      Serial.println(filename);
+      File data_file = SD.open(filename, FILE_WRITE);
+      data_file.close();
       break;
     }
   }
-
-  logfile = SD.open(filename, FILE_WRITE);
-  if( ! logfile ) {
-    Serial.print("Couldnt create "); 
-    Serial.println(filename);
-    error(3);
-  }
-  Serial.print("Writing to "); 
-  Serial.println(filename);
-
-  pinMode(SDPin, OUTPUT);
-  pinMode(8, OUTPUT);
-  Serial.println("Ready!");
+//
+//  logfile = SD.open(filename, FILE_WRITE);
+//  if( ! logfile ) {
+//    Serial.print("Couldnt create "); 
+//    Serial.println(filename);
+//    error(3);
+//  }
+//  Serial.print("Writing to "); 
+//  Serial.println(filename);
+//
+//  pinMode(13, OUTPUT);
+//  pinMode(8, OUTPUT);
+//  Serial.println("Ready!");
 }
 
-//uint8_t i=0; dunno what this does, it was just here
-
-void SD_write(String data) {
-  digitalWrite(8, HIGH);
-  
-  logfile.println(data);
-  
-  digitalWrite(8, LOW);
-  
-  delay(100);
+void SD_write(String to_write, String filename){
+  File data_file = SD.open(filename, FILE_WRITE);
+  if (data_file) {
+    data_file.println(to_write);
+    data_file.close();
+    // Also print to the serial port
+    Serial.println(to_write);
+  }
+  else {
+    Serial.println("Error opening file");
+    Serial.println(filename);
+  }
 }
