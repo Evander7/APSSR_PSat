@@ -22,6 +22,7 @@
 //#define CAM_ON
 #define SD_ON
 //#define RTC_ON
+//#define ALLSTAR
 
 // Sets out a "datapoint" structure
 // Every loop, each sensor will read its specific values, and put them into a loop-specific dp object
@@ -87,8 +88,11 @@ void setup() {
   #ifdef RTC_ON
   //RTC
   #endif
-  
+
+  #ifdef ALLSTAR
 // PLAY AUDIO
+  allstar_setup();
+  #endif
 
 }
 
@@ -131,6 +135,8 @@ void loop() {
 //  RTC_read();
   #endif
 
+  
+
 
 //*****Other stuff*****\\
 //Camera:
@@ -158,6 +164,14 @@ void loop() {
 
 //Send telemetry via wifi
 // ??
+
+
+// Play buzzer @ end of loop
+  #ifdef ALLSTAR
+// PLAY AUDIO
+  buzzer_loop();
+  #endif
+
 }
 
 
