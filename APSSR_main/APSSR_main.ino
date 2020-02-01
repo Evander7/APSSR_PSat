@@ -13,23 +13,31 @@
 // - A U D I O
 
 //#define CAMDEF
+int photo_gap = 500; // gap between subsequenct photos, in millisceconds
+int photos_taken = 0;
 
 /*Comment/Uncomment to turn modules on/off*/
 #define BARO_ON
 #define IMU_ON
 //#define GPS_ON // DEMON CODE NEVER RUN THIS
 //#define WiFi_ON
-//#define CAM_ON
+#define CAM_ON
 #define SD_ON
-//#define RTC_ON
+#define RTC_ON
 //#define ALLSTAR
 
 // Sets out a "datapoint" structure
 // Every loop, each sensor will read its specific values, and put them into a loop-specific dp object
 // This then gets concatenated together and saved as a .csv file!
 // If changing the datapoint struct, you need to change the way it's concatenated down below, and change the csv headers.
+
+
+// Sets up the output filename to save data to. the '00' will be changed each time to be sequential.
+String output_filename;
+unsigned long time_since_last_photo;
+
 struct datapoint {
-  String time_point;
+  uint32_t time_point;
   float alt;
   float temp;
   float pressure;
@@ -46,6 +54,14 @@ struct datapoint {
   int WiFi_status;
   int camera_status;
 };
+
+//char filename[10];
+//typedef struct datapoint Datapoint;
+
+void baro_setup();
+String SD_setup();
+void SD_write(String to_write, String filename);
+
 
 void setup() {
   //Starts serial communication
@@ -80,13 +96,14 @@ void setup() {
 
   #ifdef SD_ON
   //SD Card
-  SD_setup(&output_filename);
+  output_filename = SD_setup();
   // Writes initial .csv headers
-  SD_write("Time stamp,Altitude [m],Temperature [*C],Pressure [pa],Acceleration_x [m/s^2],Acceleration_y [m/s^2 ],Acceleration_z [m/s^2],Magnetometer_x [uT],Magnetometer_y [uT],Magnetometer_z [uT],Gyroscope_x [rad/s],Gyroscope_y [rad/s],Gyroscope_z [rad/s],GPS,WiFi Status,Camera Status");
+  SD_write("Time stamp,Altitude [m],Temperature [*C],Pressure [pa],Acceleration_x [m/s^2],Acceleration_y [m/s^2 ],Acceleration_z [m/s^2],Magnetometer_x [uT],Magnetometer_y [uT],Magnetometer_z [uT],Gyroscope_x [rad/s],Gyroscope_y [rad/s],Gyroscope_z [rad/s],GPS,WiFi Status,Photos Taken",output_filename);
   #endif
 
   #ifdef RTC_ON
   //RTC
+  RTC_setup();
   #endif
 
   #ifdef ALLSTAR
@@ -97,8 +114,12 @@ void setup() {
 }
 
 void loop() {
+  // put your main code here, to run repeatedly:
+  Serial.println("PSat loopin'");
+  delay(1000);
+  
   // Creates #fresh datapoint object, so we can log stuff to it
-  datapoint dp = {"placeholder"};
+  datapoint dp = {0};
 
 //  Logs telemetry
 // barometer, IMU, GPS[?]. Checks status of other things too
@@ -125,25 +146,32 @@ void loop() {
 //   WiFi status read [?}
   #endif
 
-  #ifdef CAM_ON
-  // Camera
-  camera_setup();
-  #endif
-
   #ifdef RTC_ON
-  //RTC
-//  RTC_read();
+  // Adds unix timestamp to our datapoint struct
+  get_unix(&dp);
   #endif
 
   
 
 
 //*****Other stuff*****\\
-//Camera:
+
+  #ifdef CAM_ON
+//Camera logic:
 //  have_we_deployed?()
 //  if (deployed) & (!camera_on){turn_video_on} else {nada}
 // [can we video and photo at the same time?
 // turn camera off?
+
+// Take photo every x seconds 
+if ((time_since_last_photo - millis()) > photo_gap){
+  take_photo();
+  time_since_last_photo = millis();
+}
+
+// todo: if below certain altitude, start taking video?
+  #endif
+
 // AUDIO: do we need to turn it on? off?
 
 // Save telemetry to SD card
@@ -153,13 +181,13 @@ void loop() {
   // I'm sure there's a better way to do this, I'm sorry
   // Where's Python's ",".join(list) when ya need it eh
   String data_string;
-  data_string = dp.time_point + "," + String(dp.alt) + "," + String(dp.temp) + "," + String(dp.pressure) + "," 
+  data_string = String(dp.time_point) + "," + String(dp.alt) + "," + String(dp.temp) + "," + String(dp.pressure) + "," 
   + String(dp.accel_x) + "," + String(dp.accel_y) + "," + String(dp.accel_z) + "," 
   + String(dp.mag_x) + "," + String(dp.mag_y) + "," + String(dp.mag_z) + "," 
   + String(dp.gyro_x) + "," + String(dp.gyro_y) + "," + String(dp.gyro_z) + "," 
-  + String(dp.GPS) + "," + String(dp.WiFi_status) + "," + String(dp.camera_status);
-  Serial.println(data_string);
-  SD_write(data_string, filename);
+  + String(dp.GPS) + "," + String(dp.WiFi_status) + "," + String(photos_taken);
+//  Serial.println(data_string);
+  SD_write(data_string, output_filename);
   #endif
 
 //Send telemetry via wifi

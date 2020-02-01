@@ -6,7 +6,7 @@
 #define CAMDEF
 int CAM_trig = 11;
 int led = 13;
-bool photo = false; // False for video
+bool photo = true; // False for video
 int video_length = 3; // Video length in seconds
 #endif
  
@@ -17,8 +17,9 @@ void camera_setup() {
  
   digitalWrite(led, HIGH);  
   digitalWrite(CAM_trig, HIGH); 
-  while(!Serial)
-  Serial.begin(9600);
+//  while(!Serial)
+//  Serial.begin(9600);
+  time_since_last_photo = millis();
 }
  
 // Hold HIGH and trigger quick (<250ms) LOW to take a photo. Holding LOW and trigger HIGH starts/stops video recording
@@ -47,4 +48,5 @@ void take_photo(){
     
     digitalWrite(CAM_trig, HIGH);    
     digitalWrite(led, HIGH);  
+    photos_taken += 1;
 }

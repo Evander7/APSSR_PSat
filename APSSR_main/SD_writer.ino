@@ -28,7 +28,9 @@ void error(uint8_t errno) {
 // This line is not needed if you have Adafruit SAMD board package 1.6.2+
 //   #define Serial SerialUSB
 
-void SD_setup() {
+
+
+String SD_setup() {
   // see if the card is present and can be initialized:
   if (!SD.begin(chipSelect)) {
     Serial.println("Card init. failed!");
@@ -49,7 +51,6 @@ void SD_setup() {
       File data_file = SD.open(filename, FILE_WRITE);
       data_file.close();
       return filename;
-      break;
     }
   }
 }
