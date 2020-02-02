@@ -39,7 +39,7 @@ void start_buzzer(){
     note_index = 0;
   }
   tone(buzzer_pin, all_star_verse_1[0][0], all_star_verse_1[0][1]);
-  tone(buzzer_pin_2, all_star_verse_1[0][0], all_star_verse_1[0][1]);
+//  tone(buzzer_pin_2, all_star_verse_1[0][0], all_star_verse_1[0][1]);
 
 }
 
@@ -57,7 +57,7 @@ void buzzer_loop(){
       }
       interval = all_star_verse_1[note_index][1];
       tone(buzzer_pin, all_star_verse_1[note_index][0], interval);
-      tone(buzzer_pin_2, all_star_verse_1[note_index][0], interval);
+//      tone(buzzer_pin_2, all_star_verse_1[note_index][0], interval);
 
    }
 

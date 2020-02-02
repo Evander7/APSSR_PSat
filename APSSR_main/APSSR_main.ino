@@ -24,7 +24,8 @@ int photos_taken = 0;
 #define CAM_ON
 #define SD_ON
 #define RTC_ON
-//#define ALLSTAR
+#define ALLSTAR
+#define RGB_LED
 
 // Sets out a "datapoint" structure
 // Every loop, each sensor will read its specific values, and put them into a loop-specific dp object
@@ -61,6 +62,10 @@ struct datapoint {
 void baro_setup();
 String SD_setup();
 void SD_write(String to_write, String filename);
+int r = 255;
+int g = 0;
+int b = 0;
+int t; //temp led value
 
 
 void setup() {
@@ -111,19 +116,32 @@ void setup() {
   allstar_setup();
   #endif
 
+  #ifdef RGB_LED
+  // Starts up the RGB LED
+  RGB_setup();
+  #endif
+
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   Serial.println("PSat loopin'");
-  delay(1000);
+  
+//  delay(1000);
+
+  #ifdef RGB_LED
+  // Flashes the RGB LED
+  RGB_on(r,g,b);
+  t = r;
+  r = g;
+  g = b;
+  b = t;
+  #endif
   
   // Creates #fresh datapoint object, so we can log stuff to it
   datapoint dp = {0};
 
-//  Logs telemetry
-// barometer, IMU, GPS[?]. Checks status of other things too
-
+/* ---------- Logs telemetry ---------- */
 // Barometer
   #ifdef BARO_ON
   // Temp/Pressure/Alt
@@ -136,25 +154,23 @@ void loop() {
    IMU_read(&dp);
    #endif
 
+// GPS
    #ifdef GPS_ON
-  // GPS
 //  Serial.println(GPS_read()); //[+ status?]
   #endif
-  
+
+// WiFi
   #ifdef WiFi_ON
-  // WiFi
 //   WiFi status read [?}
   #endif
 
+// RTC
   #ifdef RTC_ON
   // Adds unix timestamp to our datapoint struct
   get_unix(&dp);
   #endif
 
-  
-
-
-//*****Other stuff*****\\
+/* ---------- Other stuff ---------- */
 
   #ifdef CAM_ON
 //Camera logic:
@@ -171,8 +187,6 @@ if ((time_since_last_photo - millis()) > photo_gap){
 
 // todo: if below certain altitude, start taking video?
   #endif
-
-// AUDIO: do we need to turn it on? off?
 
 // Save telemetry to SD card
   #ifdef SD_ON
@@ -193,10 +207,10 @@ if ((time_since_last_photo - millis()) > photo_gap){
 //Send telemetry via wifi
 // ??
 
-
 // Play buzzer @ end of loop
   #ifdef ALLSTAR
 // PLAY AUDIO
+//  start_buzzer();
   buzzer_loop();
   #endif
 
@@ -218,27 +232,3 @@ if ((time_since_last_photo - millis()) > photo_gap){
  *  Camera status: 
  *  
  */
-
-
- /*Data for logging to SD card:
-  * |Time[since turned on?]|Alt|Temp|Press|Accel_x|Accel_y|Accel_z|Mag_x|Mag_y|Mag_z|Gyro_x|Gyro_y|Gyro_z|GPS|WiFi_status|camera_status|
-  * 
-  * Do we want more GPS data/refined GPS data?
-  * 
-  */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
