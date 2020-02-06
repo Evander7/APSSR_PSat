@@ -10,7 +10,7 @@ int all_star_verse_1[][2] = {{370,600},{554,300},{466,300},{466,600},{415,300},{
 int num_notes = sizeof(all_star_verse_1) / sizeof(all_star_verse_1[0]);
 
 
-#define buzzer_pin 9
+#define buzzer_pin 5
 #define buzzer_pin_2 10
 
 int note_index = 0;
@@ -24,10 +24,6 @@ bool buzzer_on = 0;
 void allstar_setup(){
   start_buzzer();
 }
-
-//void loop(){
-//   buzzer_loop();
-//}
 
 void start_buzzer(){
   buzzer_on = 1;
@@ -58,7 +54,6 @@ void buzzer_loop(){
       interval = all_star_verse_1[note_index][1];
       tone(buzzer_pin, all_star_verse_1[note_index][0], interval);
 //      tone(buzzer_pin_2, all_star_verse_1[note_index][0], interval);
-
    }
 
 }

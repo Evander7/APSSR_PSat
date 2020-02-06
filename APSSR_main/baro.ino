@@ -17,12 +17,10 @@ Adafruit_BMP280 bmp; // I2C -> pins SCL, SDA
 //Adafruit_BMP280 bmp(BMP_CS, BMP_MOSI, BMP_MISO,  BMP_SCK);
 
 void baro_setup() {
-  // put your setup code here, to run once:
     Serial.println(F("BMP280 loaded\n"));
 
   if (!bmp.begin()) {
     Serial.println(F("Could not find a valid BMP280 sensor, check wiring!"));
-//    while (1);
   }
 
     /* Default settings from datasheet. */
@@ -38,6 +36,7 @@ float baro_read(datapoint * dp) {
   float temp;
   float pressure;
   float altitude;
+   Serial.println("Baro baro-ing");
 //    Serial.print(F("Temperature = "));
     temp = bmp.readTemperature();
 //    Serial.print(temp);

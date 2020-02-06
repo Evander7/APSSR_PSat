@@ -38,15 +38,12 @@ void IMU_setup(){
     Serial.print("Ooops, no L3GD20 detected ... Check your wiring or I2C ADDR!");
     while(1);
   }
-  
-
- 
 }
 
 void IMU_read(datapoint * dp){
 // Reads from the IMU
 // Saves it to the datapoint object
-
+ Serial.println("Imu ing");
   /* Get a new sensor event */
   sensors_event_t event;
 
@@ -67,31 +64,6 @@ void IMU_read(datapoint * dp){
   // Gyroscope
   dp->gyro_x = event.gyro.x;
   dp->gyro_y = event.gyro.y;
-  dp->gyro_z = event.gyro.z;
-
-//  Serial.print(F("ACCEL "));
-//  Serial.print("X: "); Serial.print(event.acceleration.x); Serial.print("  ");
-//  Serial.print("Y: "); Serial.print(event.acceleration.y); Serial.print("  ");
-//  Serial.print("Z: "); Serial.print(event.acceleration.z); Serial.print("  ");Serial.println("m/s^2 ");
-
-  /* Display the results (magnetic vector values are in micro-Tesla (uT)) */
-//  mag.getEvent(&event);
-//  Serial.print(F("MAG   "));
-//  Serial.print("X: "); Serial.print(event.magnetic.x); Serial.print("  ");
-//  Serial.print("Y: "); Serial.print(event.magnetic.y); Serial.print("  ");
-//  Serial.print("Z: "); Serial.print(event.magnetic.z); Serial.print("  ");Serial.println("uT");
-//
-//  /* Display the results (gyrocope values in rad/s) */
-//  gyro.getEvent(&event);
-//  Serial.print(F("GYRO  "));
-//  Serial.print("X: "); Serial.print(event.gyro.x); Serial.print("  ");
-//  Serial.print("Y: "); Serial.print(event.gyro.y); Serial.print("  ");
-//  Serial.print("Z: "); Serial.print(event.gyro.z); Serial.print("  ");Serial.println("rad/s ");  
-
-//  Serial.println(F(""));
-//  delay(1000);
-
-
-
-  
+  dp->gyro_z = event.gyro.z; 
+  Serial.println(event.acceleration.x);
 }

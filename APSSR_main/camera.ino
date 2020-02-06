@@ -1,24 +1,15 @@
 // APSSR PSat code 2020
 // Header file for the camera
 
-
-#ifndef CAMDEF
-#define CAMDEF
 int CAM_trig = 11;
 int led = 13;
-bool photo = true; // False for video
-int video_length = 3; // Video length in seconds
-#endif
  
 void camera_setup() {                
   // initialize the digital pins as output.
   pinMode(led, OUTPUT);
   pinMode(CAM_trig, OUTPUT);         
- 
   digitalWrite(led, HIGH);  
   digitalWrite(CAM_trig, HIGH); 
-//  while(!Serial)
-//  Serial.begin(9600);
   time_since_last_photo = millis();
 }
  
@@ -28,8 +19,7 @@ void start_video(){
     Serial.print("Start recording\n");
     digitalWrite(CAM_trig, LOW);
     delay(1500);
-    digitalWrite(CAM_trig, HIGH);
-  
+    digitalWrite(CAM_trig, HIGH); 
 }
 
 void stop_video(){

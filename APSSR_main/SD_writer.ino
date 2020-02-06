@@ -25,11 +25,6 @@ void error(uint8_t errno) {
   }
 }
 
-// This line is not needed if you have Adafruit SAMD board package 1.6.2+
-//   #define Serial SerialUSB
-
-
-
 String SD_setup() {
   // see if the card is present and can be initialized:
   if (!SD.begin(chipSelect)) {
@@ -38,7 +33,6 @@ String SD_setup() {
   }
   Serial.println("SD Card Initialised");
   
-
   strcpy(filename, "APSSR00.csv");
   // Renames filename to have sequential numbering
   for (uint8_t i = 0; i < 100; i++) {

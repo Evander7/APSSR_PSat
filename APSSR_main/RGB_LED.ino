@@ -7,9 +7,6 @@ CRGB leds[NUM_LEDS];
 
 void RGB_setup() {
   FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
-  
-  
-
 }
 
 void RGB_on(int r, int g, int b) {

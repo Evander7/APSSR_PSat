@@ -6,37 +6,36 @@
 // List of modules:
 // - Temp/Pressure/Alt
 // - IMU
-// - GPS
+// - GPS ??
 // - WiFi
 // - Camera
 // - RTC/SD Card
 // - A U D I O
 
-//#define CAMDEF
-int photo_gap = 500; // gap between subsequenct photos, in millisceconds
+int photo_gap = 500; // gap between subsequenct photos, in milliseconds
 int photos_taken = 0;
 
 /*Comment/Uncomment to turn modules on/off*/
-#define BARO_ON
-#define IMU_ON
+//#define BARO_ON
+//#define IMU_ON
 //#define GPS_ON // DEMON CODE NEVER RUN THIS
 //#define WiFi_ON
 #define CAM_ON
-#define SD_ON
-#define RTC_ON
+//#define SD_ON
+//#define RTC_ON
 #define ALLSTAR
-#define RGB_LED
+//#define RGB_LED
 
-// Sets out a "datapoint" structure
-// Every loop, each sensor will read its specific values, and put them into a loop-specific dp object
-// This then gets concatenated together and saved as a .csv file!
-// If changing the datapoint struct, you need to change the way it's concatenated down below, and change the csv headers.
 
 
 // Sets up the output filename to save data to. the '00' will be changed each time to be sequential.
 String output_filename;
 unsigned long time_since_last_photo;
 
+// Sets out a "datapoint" structure
+// Every loop, each sensor will read its specific values, and put them into a loop-specific dp object
+// This then gets concatenated together and saved as a .csv file!
+// If changing the datapoint struct, you need to change the way it's concatenated down below, and change the csv headers.
 struct datapoint {
   uint32_t time_point;
   float alt;
@@ -56,9 +55,6 @@ struct datapoint {
   int camera_status;
 };
 
-//char filename[10];
-//typedef struct datapoint Datapoint;
-
 void baro_setup();
 String SD_setup();
 void SD_write(String to_write, String filename);
@@ -66,7 +62,6 @@ int r = 255;
 int g = 0;
 int b = 0;
 int t; //temp led value
-
 
 void setup() {
   //Starts serial communication
@@ -124,11 +119,8 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   Serial.println("PSat loopin'");
   
-//  delay(1000);
-
   #ifdef RGB_LED
   // Flashes the RGB LED
   RGB_on(r,g,b);
@@ -213,7 +205,6 @@ if ((time_since_last_photo - millis()) > photo_gap){
 //  start_buzzer();
   buzzer_loop();
   #endif
-
 }
 
 
