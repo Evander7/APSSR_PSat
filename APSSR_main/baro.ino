@@ -36,7 +36,7 @@ float baro_read(datapoint * dp) {
   float temp;
   float pressure;
   float altitude;
-   Serial.println("Baro baro-ing");
+//   Serial.println("Baro baro-ing");
 //    Serial.print(F("Temperature = "));
     temp = bmp.readTemperature();
 //    Serial.print(temp);

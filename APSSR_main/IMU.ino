@@ -43,7 +43,7 @@ void IMU_setup(){
 void IMU_read(datapoint * dp){
 // Reads from the IMU
 // Saves it to the datapoint object
- Serial.println("Imu ing");
+// Serial.println("Imu ing");
   /* Get a new sensor event */
   sensors_event_t event;
 
@@ -65,5 +65,5 @@ void IMU_read(datapoint * dp){
   dp->gyro_x = event.gyro.x;
   dp->gyro_y = event.gyro.y;
   dp->gyro_z = event.gyro.z; 
-  Serial.println(event.acceleration.x);
+//  Serial.println(event.acceleration.x);
 }

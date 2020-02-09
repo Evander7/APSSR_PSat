@@ -16,15 +16,15 @@ int photo_gap = 500; // gap between subsequenct photos, in milliseconds
 int photos_taken = 0;
 
 /*Comment/Uncomment to turn modules on/off*/
-//#define BARO_ON
-//#define IMU_ON
+#define BARO_ON
+#define IMU_ON
 //#define GPS_ON // DEMON CODE NEVER RUN THIS
 //#define WiFi_ON
 #define CAM_ON
-//#define SD_ON
-//#define RTC_ON
+#define SD_ON
+#define RTC_ON
 #define ALLSTAR
-//#define RGB_LED
+#define RGB_LED
 
 
 
@@ -92,6 +92,8 @@ void setup() {
   #ifdef CAM_ON
   // Camera
   camera_setup();
+  // Takes video - make sure to comment out photo code (?)
+//  start_video();
   #endif
 
   #ifdef SD_ON
@@ -124,6 +126,8 @@ void loop() {
   #ifdef RGB_LED
   // Flashes the RGB LED
   RGB_on(r,g,b);
+  // Small delay to give LED more time to flash
+  delay(50);
   t = r;
   r = g;
   g = b;
@@ -164,6 +168,8 @@ void loop() {
 
 /* ---------- Other stuff ---------- */
 
+/* Takes photos */
+
   #ifdef CAM_ON
 //Camera logic:
 //  have_we_deployed?()
@@ -179,6 +185,8 @@ if ((time_since_last_photo - millis()) > photo_gap){
 
 // todo: if below certain altitude, start taking video?
   #endif
+
+
 
 // Save telemetry to SD card
   #ifdef SD_ON
